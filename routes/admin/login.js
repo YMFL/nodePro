@@ -5,6 +5,7 @@ const DB = require('../../model/db.js')
 const Redis = require('../../model/redis.js')
 const jwt = require('jwt-simple')
 let svgCaptcha = require('svg-captcha')
+let Config = require('../../model/config')
 
 router.post('/doLogin', async (ctx) => {
   let username = ctx.request.body.username
@@ -18,7 +19,7 @@ router.post('/doLogin', async (ctx) => {
   // 取数据库匹配
   let result = await DB.find('admin', {'username': username, 'password': tools.md5(password)})
   if (result.length) {
-    var token = jwt.encode(result[0], 'yqh')
+    var token = jwt.encode(result[0], Config.jwtSecret)
     ctx.session.userinfo = token
     await Redis.set(token, 1)
     ctx.success({token: token})

@@ -7,7 +7,8 @@ let user = require('./admin/user');
 let whiteList = [
   '/admin/login',
   '/admin/login/doLogin',
-  '/admin/login/code',
+  '/admin/user/register',
+  '/admin/login/code'
 ]
 router.use(async (ctx, next) => {
   // 权限判断
@@ -17,7 +18,7 @@ router.use(async (ctx, next) => {
     if (whiteList.indexOf(url.parse(ctx.url).pathname) >= 0) {
       await next()
     } else {
-      ctx.fail('您没有相应权限', 0)
+      ctx.fail('您没有相应权限', 10000)
     }
   }
 })
